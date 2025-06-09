@@ -7,6 +7,8 @@ const viewer = new Cesium.Viewer("cesiumContainer", {
   shouldAnimate: true
 });
 
+viewer.scene.globe.depthTestAgainstTerrain = true;
+
 // SKETCHFAB ASSET
 const assetId = 3446467;
 
@@ -47,6 +49,10 @@ window.goTo = function (key) {
   const loc = LOCATIONS[key];
   if (!loc || !balloon) return;
 
-  balloon.position = Cesium.Cartesian3.fromDegrees(...loc.coords);
-  viewer.flyTo(balloon);
+  const newPos = Cesium.Cartesian3.fromDegrees(...loc.coords);
+  balloon.position = newPos;
+
+  viewer.flyTo(balloon, {
+    offset: new Cesium.HeadingPitchRange(0, -0.5, 1000)
+  });
 };
