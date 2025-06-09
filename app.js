@@ -28,9 +28,9 @@ cappadocia: {
 let balloon;
 
 Cesium.IonResource.fromAssetId(assetId).then(function (resource) {
-  const balloon = viewer.entities.add({
+  balloon = viewer.entities.add({
     name: "hot_air_baloon",
-    position: Cesium.Cartesian3.fromDegrees(-106.59682763930132, 35.1978416065311, 500), 
+    position: Cesium.Cartesian3.fromDegrees(...LOCATIONS.albuquerque.coords), 
     model: {
       uri: resource,
       scale: 2.0,
@@ -45,16 +45,8 @@ Cesium.IonResource.fromAssetId(assetId).then(function (resource) {
 // FLY to LOCATION and UPDATE POS.
 window.goTo = function (key) {
   const loc = LOCATIONS[key];
-  if (!loc) return;
+  if (!loc || !balloon) return;
 
-  const position = Cesium.Cartesian3.fromDegrees(
-  loc.coords[0],
-  loc.coords[1],
-  loc.coords[2]
-);
-
-  if (balloon) {
-    balloon.position = position;
-    viewer.flyTo(balloon);
-  }
+  balloon.position = Cesium.Cartesian3.fromDegrees(...loc.coords);
+  viewer.flyTo(balloon);
 };
