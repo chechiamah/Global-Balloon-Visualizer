@@ -25,6 +25,8 @@ cappadocia: {
  }
 };
 // GLTF MODEL AND PLACEMENT
+let balloon;
+
 Cesium.IonResource.fromAssetId(assetId).then(function (resource) {
   const balloon = viewer.entities.add({
     name: "hot_air_baloon",
