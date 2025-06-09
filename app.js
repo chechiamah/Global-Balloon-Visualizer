@@ -3,12 +3,27 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 // Create the Cesium viewer
 const viewer = new Cesium.Viewer("cesiumContainer", {
+  terrainProvider: Cesium.createWorldTerrain(),
   shouldAnimate: true
 });
 
 // SKETCHFAB ASSET
 const assetId = 3446467;
 
+const LOCATIONS = {
+albuquerque: {
+  name: "Albuquerque, NM", 
+  coords: [-106.59682763930132, 35.1978416065311, 500]
+ }, 
+serengeti: {
+  name: "Serengeti, Tanzania", 
+  coords: [34.83331720209983, -2.3330545791698194, 800]
+ }, 
+cappadocia: {
+  name: "Cappadocia, Türkiye", 
+  coords: [34.80863904092292, 38.65878700927503, 700]
+ }
+};
 // GLTF MODEL AND PLACEMENT
 Cesium.IonResource.fromAssetId(assetId).then(function (resource) {
   const balloon = viewer.entities.add({
@@ -24,3 +39,20 @@ Cesium.IonResource.fromAssetId(assetId).then(function (resource) {
 
   viewer.flyTo(balloon);
 });
+
+// FLY to LOCATION and UPDATE POS.
+window.goTo = function (key) {
+  const loc = LOCATIONS[key];
+  if (!loc) return;
+
+  const position = Cesium.Cartesian3.fromDegrees(
+  loc.coords[0],
+  loc.coords[1],
+  loc.coords[2]
+);
+
+  if (balloon) {
+    balloon.position = position;
+    viewer.flyTo(balloon);
+  }
+};
