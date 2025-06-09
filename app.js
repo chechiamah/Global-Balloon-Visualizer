@@ -3,36 +3,17 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 // Create the Cesium viewer
 const viewer = new Cesium.Viewer("cesiumContainer", {
-  terrainProvider: Cesium.createWorldTerrain(),
   shouldAnimate: true
 });
-
-viewer.scene.globe.depthTestAgainstTerrain = true;
 
 // SKETCHFAB ASSET
 const assetId = 3446467;
 
-const LOCATIONS = {
-albuquerque: {
-  name: "Albuquerque, NM", 
-  coords: [-106.59682763930132, 35.1978416065311, 500]
- }, 
-serengeti: {
-  name: "Serengeti, Tanzania", 
-  coords: [34.83331720209983, -2.3330545791698194, 800]
- }, 
-cappadocia: {
-  name: "Cappadocia, Türkiye", 
-  coords: [34.80863904092292, 38.65878700927503, 700]
- }
-};
 // GLTF MODEL AND PLACEMENT
-let balloon;
-
 Cesium.IonResource.fromAssetId(assetId).then(function (resource) {
-  balloon = viewer.entities.add({
+  const balloon = viewer.entities.add({
     name: "hot_air_baloon",
-    position: Cesium.Cartesian3.fromDegrees(...LOCATIONS.albuquerque.coords), 
+    position: Cesium.Cartesian3.fromDegrees(-106.59682763930132, 35.1978416065311, 500), 
     model: {
       uri: resource,
       scale: 2.0,
@@ -43,16 +24,3 @@ Cesium.IonResource.fromAssetId(assetId).then(function (resource) {
 
   viewer.flyTo(balloon);
 });
-
-// FLY to LOCATION and UPDATE POS.
-window.goTo = function (key) {
-  const loc = LOCATIONS[key];
-  if (!loc || !balloon) return;
-
-  const newPos = Cesium.Cartesian3.fromDegrees(...loc.coords);
-  balloon.position = newPos;
-
-  viewer.flyTo(balloon, {
-    offset: new Cesium.HeadingPitchRange(0, -0.5, 1000)
-  });
-};
